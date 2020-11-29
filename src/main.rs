@@ -67,6 +67,14 @@ fn read_next_index() -> Option<Index> {
                 Ok(v) => second = v,
                 Err(_) => return None
             }
+            match first {
+                0..=2 => {},
+                _ => return None
+            }
+            match second {
+                0..=2 => {},
+                _ => return None
+            }
             Some(Index{ 0: first, 1: second })
         },
         Err(_) => {
