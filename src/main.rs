@@ -9,6 +9,11 @@ fn main() {
     let mut current_index: Index;
     let mut counter = 0;
     loop {
+        if counter >= 9 {
+            println!("Draw!");
+            break;
+        }
+
         println!("Your turn {}: ", match current_piece {
             Piece::Circle(v) => v,
             Piece::Fork(v) => v
@@ -26,11 +31,9 @@ fn main() {
         }
         chess_board.print_board();
 
-        //  unit win or draw
-        if counter >= 5 {
-            
-        }
-        
+        //  used
+        counter +=1;
+
         match current_piece {
             Piece::Circle(_) => {
                 //  used
@@ -41,12 +44,24 @@ fn main() {
                 current_piece = Piece::get_circle();
             }
         }
-        //  used
-        counter +=1;
-        break;
+
+        //  unit win or draw
+        if counter >= 5 {
+            if let Some(result) = chess_board.check_win() {
+                match result {
+                    ChessResult::CircleWin => {
+                        println!("Winner: {}!", '〇');
+                        return;
+                    },
+                    ChessResult::ForkWin => {
+                        println!("Winner: {}!", '×');
+                        return;
+                    },
+                    _ => {}
+                }
+            }
+        }
     }
-    
-    
 }
 
 fn read_next_index() -> Option<Index> {

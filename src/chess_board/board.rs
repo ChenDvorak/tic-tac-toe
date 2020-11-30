@@ -8,6 +8,7 @@ pub enum ChessResult {
 }
 
 #[derive(Copy, Clone)]
+#[derive(PartialEq)]
 pub enum Piece {
     Circle(char),
     Fork(char)
@@ -49,6 +50,7 @@ impl Board {
     }
 
     pub fn print_board(&self) {
+        print!("\x1b[2J\x1b[H");
         println!("     0   1   2");
         println!("   _____________");
         println!("0  | {} | {} | {} |", 
@@ -70,18 +72,59 @@ impl Board {
 
     pub fn check_win(&self) -> Option<ChessResult> {
         let mut is_draw = false;
-        'outer: for i in 0..3 {
+        'is_draw: for i in 0..3 {
             for j in 0..3 {
                 if let None = self.value[i][j] {
                     is_draw = true;
-                    break 'outer;
+                    break 'is_draw;
                 }
             }
         }
         if is_draw {
             return Some(ChessResult::Draw);
         }
-
+        
+        for i in 0..3 {
+            //  check row
+            if self.value[i][0] != None 
+            && self.value[i][0] == self.value[i][1] && self.value[i][1] == self.value[i][2] {
+                if let Some(piece) = self.value[i][0] {
+                    match piece {
+                        Piece::Circle(_) => return Some(ChessResult::CircleWin),
+                        Piece::Fork(_) => return Some(ChessResult::ForkWin)
+                    }
+                }
+            }
+            //  check column
+            if self.value[0][i] != None 
+            && self.value[0][i] == self.value[1][i] && self.value[1][i] == self.value[2][i] {
+                if let Some(piece) = self.value[0][i] {
+                    match piece {
+                        Piece::Circle(_) => return Some(ChessResult::CircleWin),
+                        Piece::Fork(_) => return Some(ChessResult::ForkWin)
+                    }
+                }
+            }
+            // diagonal
+            if self.value[0][0] != None
+            && self.value[0][0] == self.value[1][1] && self.value[1][1] == self.value[2][2] {
+                if let Some(piece) = self.value[0][0] {
+                    match piece {
+                        Piece::Circle(_) => return Some(ChessResult::CircleWin),
+                        Piece::Fork(_) => return Some(ChessResult::ForkWin)
+                    }
+                }
+            }
+            if self.value[0][2] != None
+            && self.value[0][2] == self.value[1][1] && self.value[1][1] == self.value[2][0] {
+                if let Some(piece) = self.value[0][2] {
+                    match piece {
+                        Piece::Circle(_) => return Some(ChessResult::CircleWin),
+                        Piece::Fork(_) => return Some(ChessResult::ForkWin)
+                    }
+                }
+            }
+        }
         
         None
     }
