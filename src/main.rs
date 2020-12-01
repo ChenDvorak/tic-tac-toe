@@ -56,8 +56,7 @@ fn main() {
                     ChessResult::ForkWin => {
                         println!("Winner: {}!", '×');
                         return;
-                    },
-                    _ => {}
+                    }
                 }
             }
         }
