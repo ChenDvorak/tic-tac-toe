@@ -3,8 +3,7 @@ pub struct Index(pub usize, pub usize);
 
 pub enum ChessResult {
     CircleWin,
-    ForkWin,
-    Draw
+    ForkWin
 }
 
 #[derive(Copy, Clone)]
@@ -71,19 +70,6 @@ impl Board {
     }
 
     pub fn check_win(&self) -> Option<ChessResult> {
-        let mut is_draw = false;
-        'is_draw: for i in 0..3 {
-            for j in 0..3 {
-                if let None = self.value[i][j] {
-                    is_draw = true;
-                    break 'is_draw;
-                }
-            }
-        }
-        if is_draw {
-            return Some(ChessResult::Draw);
-        }
-        
         for i in 0..3 {
             //  check row
             if self.value[i][0] != None 
